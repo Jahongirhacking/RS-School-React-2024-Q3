@@ -1,30 +1,27 @@
 import { Component } from 'react'
 import handleLocalStorage from '../utils/handleLocalStorage';
+import localStorageKeys from '../utils/localStorageKeys';
 
 interface NavbarProps {
     setInputValue: (value: string) => void;
     onBtnClick: () => void;
 }
 
-const localStorageKey = "inputValue";
 const defaultValue = "";
 
 export default class Navbar extends Component<NavbarProps> {
     componentDidMount(): void {
-        this.props.setInputValue(handleLocalStorage(localStorageKey, defaultValue));
+        this.props.setInputValue(handleLocalStorage(localStorageKeys.searched, defaultValue));
     }
 
     render() {
         return (
-            <nav>
+            <nav className='nav'>
                 <form>
                     <input
                         type="text"
-                        value={handleLocalStorage(localStorageKey, defaultValue)}
-                        onChange={(e) => {
-                            localStorage.setItem(localStorageKey, e.target.value);
-                            this.props.setInputValue(e.target.value)
-                        }}
+                        defaultValue={handleLocalStorage(localStorageKeys.searched, "")}
+                        onChange={(e) => { this.props.setInputValue(e.target.value) }}
                     />
 
                     <button type='submit' onClick={(e) => {

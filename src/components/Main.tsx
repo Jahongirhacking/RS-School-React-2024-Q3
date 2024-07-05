@@ -2,15 +2,15 @@ import { Component } from 'react'
 import IPerson from '../types/IPerson';
 
 interface MainProps {
-    inputValue: string;
     items: IPerson[];
+    searched: string;
 }
 
 export default class Main extends Component<MainProps> {
     render() {
         return (
-            <main>
-                <h3>Searched: {this.props.inputValue}</h3>
+            <main className='main'>
+                <h3>Searched: {this.props.searched}</h3>
                 <div className='card-container'>
                     {
                         this.props.items.map(item => (
