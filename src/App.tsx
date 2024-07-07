@@ -1,12 +1,12 @@
-import { Component } from 'react'
-import Navbar from './components/Navbar'
-import Main from './components/Main'
-import IPerson from './types/IPerson';
-import fetchApi from './utils/fetchApi';
-import handleLocalStorage from './utils/handleLocalStorage';
-import localStorageKeys from './utils/localStorageKeys';
+import { Component } from "react";
+import Navbar from "./components/Navbar";
+import Main from "./components/Main";
+import IPerson from "./types/IPerson";
+import fetchApi from "./utils/fetchApi";
+import handleLocalStorage from "./utils/handleLocalStorage";
+import localStorageKeys from "./utils/localStorageKeys";
 
-interface AppProps { }
+interface AppProps {}
 
 interface IApiData {
   count: number;
@@ -27,7 +27,7 @@ const initialData = {
   next: null,
   previous: null,
   results: [],
-}
+};
 
 const apiURL = "https://swapi.dev/api/people";
 
@@ -39,7 +39,7 @@ export default class App extends Component<AppProps, AppState> {
       searched: "",
       page: 1,
       apiData: initialData,
-    }
+    };
     this.handleFetchPeople = this.handleFetchPeople.bind(this);
   }
 
@@ -50,13 +50,19 @@ export default class App extends Component<AppProps, AppState> {
         count: data.count,
         next: data.next,
         previous: data.previous,
-        results: data.results.map(person => ({
-          name: person.name,
-          height: person.height,
-          created: person.created,
-        })).filter(person => person.name.toLowerCase().includes(this.state.searched.toLowerCase()))
-      }
-    })
+        results: data.results
+          .map((person) => ({
+            name: person.name,
+            height: person.height,
+            created: person.created,
+          }))
+          .filter((person) =>
+            person.name
+              .toLowerCase()
+              .includes(this.state.searched.toLowerCase()),
+          ),
+      },
+    });
   }
 
   componentDidMount(): void {
@@ -65,7 +71,10 @@ export default class App extends Component<AppProps, AppState> {
     this.handleFetchPeople();
   }
 
-  componentDidUpdate(_: Readonly<AppProps>, prevState: Readonly<AppState>): void {
+  componentDidUpdate(
+    _: Readonly<AppProps>,
+    prevState: Readonly<AppState>,
+  ): void {
     if (prevState.searched !== this.state.searched) {
       localStorage.setItem(localStorageKeys.searched, this.state.searched);
       this.handleFetchPeople();
@@ -74,10 +83,14 @@ export default class App extends Component<AppProps, AppState> {
 
   render() {
     return (
-      <div className='container'>
+      <div className="container">
         <Navbar
-          setInputValue={(value: string) => { this.setState({ inputValue: value }) }}
-          onBtnClick={() => { this.setState({ searched: this.state.inputValue }) }}
+          setInputValue={(value: string) => {
+            this.setState({ inputValue: value });
+          }}
+          onBtnClick={() => {
+            this.setState({ searched: this.state.inputValue });
+          }}
         />
         <hr />
         <Main
@@ -85,6 +98,6 @@ export default class App extends Component<AppProps, AppState> {
           searched={this.state.searched}
         />
       </div>
-    )
+    );
   }
 }
