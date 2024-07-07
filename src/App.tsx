@@ -6,9 +6,10 @@ import fetchApi from "./utils/fetchApi";
 import handleLocalStorage from "./utils/handleLocalStorage";
 import localStorageKeys from "./utils/localStorageKeys";
 
-interface AppProps {}
+interface AppProps { }
 
 interface IApiData {
+  status: "ok" | "pending" | "error";
   count: number;
   next: string | null;
   previous: string | null;
@@ -22,7 +23,8 @@ interface AppState {
   apiData: IApiData;
 }
 
-const initialData = {
+const initialData: IApiData = {
+  status: "ok",
   count: 0,
   next: null,
   previous: null,
@@ -44,25 +46,45 @@ export default class App extends Component<AppProps, AppState> {
   }
 
   async handleFetchPeople() {
-    const data: IApiData = await fetchApi(`${apiURL}?page=${this.state.page}`);
-    this.setState({
-      apiData: {
-        count: data.count,
-        next: data.next,
-        previous: data.previous,
-        results: data.results
-          .map((person) => ({
-            name: person.name,
-            height: person.height,
-            created: person.created,
-          }))
-          .filter((person) =>
-            person.name
-              .toLowerCase()
-              .includes(this.state.searched.toLowerCase()),
-          ),
-      },
-    });
+    try {
+      // Pending
+      this.setState({
+        apiData: {
+          ...this.state.apiData,
+          status: "pending"
+        }
+      })
+      // Fetching
+      const data: IApiData = await fetchApi(`${apiURL}?page=${this.state.page}`);
+      // OK
+      this.setState({
+        apiData: {
+          status: "ok",
+          count: data.count,
+          next: data.next,
+          previous: data.previous,
+          results: data.results
+            .map((person) => ({
+              name: person.name,
+              height: person.height,
+              created: person.created,
+            }))
+            .filter((person) =>
+              person.name
+                .toLowerCase()
+                .includes(this.state.searched.toLowerCase()),
+            ),
+        },
+      });
+    } catch (err) {
+      // Error
+      this.setState({
+        apiData: {
+          ...initialData,
+          status: "error",
+        }
+      })
+    }
   }
 
   componentDidMount(): void {
@@ -95,6 +117,7 @@ export default class App extends Component<AppProps, AppState> {
         <hr />
         <Main
           items={this.state.apiData.results}
+          status={this.state.apiData.status}
           searched={this.state.searched}
         />
       </div>
