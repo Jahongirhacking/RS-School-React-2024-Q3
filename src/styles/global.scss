@@ -1,0 +1,49 @@
+@import "./normalize.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .nav {
+    padding: 20px 10px;
+
+    form {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      
+      input {
+      	padding: 5px 10px;
+      	
+        &:focus {
+          outline: none;
+        }
+      }
+      
+      button {
+      	padding: 5px 10px;
+      }
+    }
+  }
+
+  .main {
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      .card {
+        padding: 15px;
+        border: 2px solid black;
+        border-radius: 4px;
+      }
+    }
+  }
+}
