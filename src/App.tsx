@@ -47,16 +47,13 @@ export default class App extends Component<AppProps, AppState> {
 
   async handleFetchPeople() {
     try {
-      // Pending
       this.setState({
         apiData: {
           ...this.state.apiData,
           status: "pending"
         }
       })
-      // Fetching
       const data: IApiData = await fetchApi(`${apiURL}?page=${this.state.page}`);
-      // OK
       this.setState({
         apiData: {
           status: "ok",
@@ -77,7 +74,6 @@ export default class App extends Component<AppProps, AppState> {
         },
       });
     } catch (err) {
-      // Error
       this.setState({
         apiData: {
           ...initialData,
